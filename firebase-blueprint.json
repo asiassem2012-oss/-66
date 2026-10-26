@@ -1,0 +1,117 @@
+{
+  "entities": {
+    "Profile": {
+      "title": "UserProfile",
+      "description": "User profile with role assignment (admin or student)",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "role": { "type": "string", "enum": ["admin", "student"] },
+        "phone": { "type": "string", "maxLength": 30 },
+        "avatar": { "type": "string", "maxLength": 500 },
+        "joinedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["name", "email", "role"]
+    },
+    "Course": {
+      "title": "QuranCourse",
+      "description": "Quran memorization and tajweed course",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "instructor": { "type": "string", "maxLength": 150 },
+        "startDate": { "type": "string", "maxLength": 50 },
+        "schedule": { "type": "string", "maxLength": 150 },
+        "type": { "type": "string", "enum": ["free", "paid"] },
+        "price": { "type": "number" },
+        "currency": { "type": "string", "maxLength": 10 },
+        "paymentLink": { "type": "string", "maxLength": 500 },
+        "onlineLessonLink": { "type": "string", "maxLength": 500 },
+        "level": { "type": "string", "maxLength": 50 },
+        "image": { "type": "string", "maxLength": 500 },
+        "currentStudentsCount": { "type": "number" },
+        "maxStudents": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "instructor", "startDate", "schedule", "type", "onlineLessonLink"]
+    },
+    "EnrollmentRequest": {
+      "title": "EnrollmentRequest",
+      "description": "Student request to join a Quran course with WhatsApp number",
+      "type": "object",
+      "properties": {
+        "courseId": { "type": "string", "maxLength": 100 },
+        "courseTitle": { "type": "string", "maxLength": 200 },
+        "userId": { "type": "string", "maxLength": 100 },
+        "studentName": { "type": "string", "maxLength": 100 },
+        "studentEmail": { "type": "string", "maxLength": 150 },
+        "whatsappNumber": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "enum": ["pending", "accepted", "rejected"] },
+        "rejectionReason": { "type": "string", "maxLength": 500 },
+        "notes": { "type": "string", "maxLength": 500 },
+        "requestedAt": { "type": "string", "maxLength": 50 },
+        "reviewedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["courseId", "courseTitle", "userId", "studentName", "whatsappNumber", "status"]
+    },
+    "StudentRecord": {
+      "title": "StudentRecord",
+      "description": "Active accepted student enrolled in a course",
+      "type": "object",
+      "properties": {
+        "enrollmentId": { "type": "string", "maxLength": 100 },
+        "userId": { "type": "string", "maxLength": 100 },
+        "studentName": { "type": "string", "maxLength": 100 },
+        "studentEmail": { "type": "string", "maxLength": 150 },
+        "whatsappNumber": { "type": "string", "maxLength": 40 },
+        "courseId": { "type": "string", "maxLength": 100 },
+        "courseTitle": { "type": "string", "maxLength": 200 },
+        "joinedDate": { "type": "string", "maxLength": 50 },
+        "attendanceRate": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 }
+      },
+      "required": ["userId", "studentName", "whatsappNumber", "courseId", "courseTitle"]
+    },
+    "AcademyMessage": {
+      "title": "AcademyMessage",
+      "description": "Notification or message sent from academy administration",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 100 },
+        "title": { "type": "string", "maxLength": 200 },
+        "content": { "type": "string", "maxLength": 1500 },
+        "type": { "type": "string", "maxLength": 50 },
+        "courseId": { "type": "string", "maxLength": 100 },
+        "courseTitle": { "type": "string", "maxLength": 200 },
+        "link": { "type": "string", "maxLength": 500 },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["userId", "title", "content", "type"]
+    }
+  },
+  "firestore": {
+    "/profiles/{userId}": {
+      "schema": "Profile",
+      "description": "User profiles and academy roles"
+    },
+    "/courses/{courseId}": {
+      "schema": "Course",
+      "description": "Quran courses and recitation sessions"
+    },
+    "/enrollment_requests/{requestId}": {
+      "schema": "EnrollmentRequest",
+      "description": "Student pending and reviewed requests"
+    },
+    "/enrolled_students/{studentId}": {
+      "schema": "StudentRecord",
+      "description": "Accepted active students per course"
+    },
+    "/messages/{messageId}": {
+      "schema": "AcademyMessage",
+      "description": "Notifications and live lesson messages"
+    }
+  }
+}

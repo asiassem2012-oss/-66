@@ -1,0 +1,6 @@
+{
+  "name": "أكاديمية أهل القرآن - إدارة أ/ سلوى بكر",
+  "description": "منصة أكاديمية أهل القرآن لتحفيظ وتجويد القرآن الكريم برعاية وإدارة أ/ سلوى بكر مع نظام امتحانات ذكي ولوحة تحكم متكاملة",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

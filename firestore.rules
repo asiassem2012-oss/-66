@@ -1,0 +1,56 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    // Profiles
+    match /profiles/{userId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn() && (request.auth.uid == userId || request.auth.token.email == "asiassem2012@gmail.com");
+      allow delete: if request.auth.token.email == "asiassem2012@gmail.com";
+    }
+
+    // Courses directory (Publicly readable so students can browse)
+    match /courses/{courseId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Enrollment requests (Students create with WhatsApp, Admins approve/reject)
+    match /enrollment_requests/{requestId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn();
+      allow update, delete: if isSignedIn();
+    }
+
+    // Enrolled students management
+    match /enrolled_students/{studentId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // Messages & Announcements
+    match /messages/{messageId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    // Test connection document
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+  }
+}
