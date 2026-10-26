@@ -22,6 +22,7 @@ interface AuthModalProps {
   onClose: () => void;
   currentUser: User | null;
   forced?: boolean; // When mandatory login is required
+  initialTab?: 'student_login' | 'student_register' | 'admin_login';
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -29,8 +30,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   currentUser,
   forced = false,
+  initialTab = 'student_login',
 }) => {
-  const [tab, setTab] = useState<'student_login' | 'student_register' | 'admin_login'>('student_login');
+  const [tab, setTab] = useState<'student_login' | 'student_register' | 'admin_login'>(initialTab);
   
   // Student Login/Register
   const [name, setName] = useState('');
@@ -43,6 +45,13 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [adminPassword, setAdminPassword] = useState('salwa_quran_2026');
 
   const [message, setMessage] = useState<{ text: string; isError?: boolean } | null>(null);
+
+  // Sync tab if initialTab changes
+  React.useEffect(() => {
+    if (isOpen && initialTab) {
+      setTab(initialTab);
+    }
+  }, [isOpen, initialTab]);
 
   if (!isOpen) return null;
 
@@ -64,7 +73,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   const handleAdminLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const res = store.loginWithCredentials(adminUsername, adminPassword);
+    const res = store.loginAdmin(adminUsername, adminPassword);
     setMessage({ text: res.message, isError: !res.success });
     if (res.success) {
       setTimeout(() => {
@@ -88,15 +97,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }, 1200);
   };
 
-  const handleQuickRole = (role: UserRole) => {
-    store.switchRole(role);
-    setMessage({ text: `تم التبديل بنجاح إلى حساب ${role === 'admin' ? 'الإدارة (أ/ سلوى بكر)' : 'الطالب'}` });
-    setTimeout(() => {
-      setMessage(null);
-      onClose();
-    }, 800);
-  };
-
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/75 backdrop-blur-xs flex items-center justify-center p-4">
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-stone-200 overflow-hidden text-right">
@@ -108,7 +108,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-sm text-white">بوابة تسجيل الدخول الإجباري</h3>
+              <h3 className="font-bold text-sm text-white">بوابة تسجيل الدخول الرسمية</h3>
               <p className="text-xs text-amber-300">أكاديمية أهل القرآن (إدارة أ/ سلوى بكر)</p>
             </div>
           </div>
@@ -136,46 +136,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
             <button
               onClick={() => store.logout()}
-              className="text-xs text-red-600 hover:text-red-800 font-semibold"
+              className="text-xs text-red-600 hover:text-red-800 font-semibold cursor-pointer"
             >
               تسجيل الخروج
             </button>
           </div>
         )}
-
-        {/* Fast 1-Click Evaluation Switchers */}
-        <div className="p-3 bg-amber-50/70 border-b border-amber-200/80 space-y-1.5">
-          <div className="text-[11px] font-bold text-amber-950 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span>تسجيل فوري للاختبار والتقييم:</span>
-          </div>
-
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => handleQuickRole('admin')}
-              className={`p-2 rounded-lg text-xs font-bold border transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 ${
-                currentUser?.role === 'admin'
-                  ? 'bg-amber-500 text-stone-950 border-amber-600 shadow-xs'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-800" />
-              <span>دخول إدارة الأكاديمية</span>
-            </button>
-
-            <button
-              onClick={() => handleQuickRole('student')}
-              className={`p-2 rounded-lg text-xs font-bold border transition-colors cursor-pointer text-center flex items-center justify-center gap-1.5 ${
-                currentUser?.role === 'student'
-                  ? 'bg-emerald-800 text-white border-emerald-900 shadow-xs'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
-              }`}
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-emerald-300" />
-              <span>دخول طالب مسجل</span>
-            </button>
-          </div>
-        </div>
 
         {/* Navigation Tabs */}
         <div className="flex border-b border-stone-200 bg-stone-50 text-xs font-bold">

@@ -28,6 +28,7 @@ interface NavbarProps {
   pendingCount: number;
   unreadMessagesCount: number;
   onOpenAuth: () => void;
+  onOpenAdminLogin: () => void;
   onOpenSupabase: () => void;
   onOpenFeedback: () => void;
 }
@@ -39,6 +40,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   pendingCount,
   unreadMessagesCount,
   onOpenAuth,
+  onOpenAdminLogin,
   onOpenSupabase,
   onOpenFeedback,
 }) => {
@@ -46,10 +48,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const settings = store.getSettings();
 
   const isAdmin = currentUser?.role === 'admin';
-
-  const handleRoleToggle = () => {
-    store.switchRole(isAdmin ? 'student' : 'admin');
-  };
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-stone-200 shadow-xs">
@@ -61,14 +59,32 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="hidden sm:inline text-stone-400">· هاتف الإدارة: {settings.contactPhone}</span>
         </div>
         <div className="flex items-center gap-3">
-          <button
-            onClick={handleRoleToggle}
-            className="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-sm transition-colors flex items-center gap-1 cursor-pointer"
-            title="تبديل فوري لتجربة الصلاحيات"
-          >
-            <Sparkles className="w-3 h-3 text-amber-400" />
-            <span>{isAdmin ? 'تحويل لحساب طالب' : 'تحويل لحساب الإدارة (أ/ سلوى)'}</span>
-          </button>
+          {!isAdmin ? (
+            <button
+              onClick={onOpenAdminLogin}
+              className="text-xs bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-2.5 py-0.5 rounded-sm transition-colors flex items-center gap-1.5 cursor-pointer font-bold"
+              title="دخول لوحة تحكم الإدارة باسم مستخدم وكلمة مرور"
+            >
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>دخول لوحة الإدارة (أدمن)</span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <span className="text-xs bg-emerald-800 text-amber-300 px-2.5 py-0.5 rounded-sm border border-emerald-600 font-bold flex items-center gap-1.5 shadow-xs">
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span>لوحة الإدارة (أ/ سلوى بكر)</span>
+              </span>
+              <button
+                onClick={() => {
+                  store.logout();
+                  setActiveTab('courses');
+                }}
+                className="text-[11px] text-stone-300 hover:text-white underline cursor-pointer"
+              >
+                خروج من الإدارة
+              </button>
+            </div>
+          )}
 
           <button
             onClick={onOpenSupabase}
@@ -314,12 +330,23 @@ export const Navbar: React.FC<NavbarProps> = ({
           )}
 
           <div className="pt-2 border-t border-stone-200">
-            <button
-              onClick={() => { handleRoleToggle(); setMobileMenuOpen(false); }}
-              className="w-full text-center py-2 text-xs font-bold bg-emerald-950 text-amber-300 rounded-lg"
-            >
-              التبديل إلى: {isAdmin ? 'طالب مسجل' : 'إدارة الأكاديمية (أ/ سلوى بكر)'}
-            </button>
+            {!isAdmin ? (
+              <button
+                onClick={() => { onOpenAdminLogin(); setMobileMenuOpen(false); }}
+                className="w-full text-center py-2.5 text-xs font-bold bg-emerald-950 text-amber-300 rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span>دخول لوحة تحكم الإدارة (أ/ سلوى بكر)</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => { store.logout(); setActiveTab('courses'); setMobileMenuOpen(false); }}
+                className="w-full text-center py-2.5 text-xs font-bold bg-red-800 text-white rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>تسجيل خروج الإدارة</span>
+              </button>
+            )}
           </div>
         </div>
       )}

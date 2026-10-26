@@ -9,12 +9,13 @@ import { StudentExamsView } from './components/StudentExamsView';
 import { AdminDashboard } from './components/AdminDashboard';
 import { EnrollModal } from './components/EnrollModal';
 import { AuthModal } from './components/AuthModal';
+import { AdminLoginModal } from './components/AdminLoginModal';
 import { FeedbackModal } from './components/FeedbackModal';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { SupabaseConfigModal } from './components/SupabaseConfigModal';
 import { store } from './lib/store';
 import { Course, ActiveTab, User, Teacher, Exam, ExamSubmission } from './types';
-import { BookOpen, Phone, Video, ShieldCheck, Heart, Sparkles, Trophy, Star } from 'lucide-react';
+import { BookOpen, Phone, Video, ShieldCheck, Heart, Sparkles, Trophy, Star, Lock } from 'lucide-react';
 
 export default function App() {
   // Store reactive state
@@ -32,6 +33,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('courses');
   const [enrollModalCourse, setEnrollModalCourse] = useState<Course | null>(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [adminLoginModalOpen, setAdminLoginModalOpen] = useState(false);
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const [supabaseModalOpen, setSupabaseModalOpen] = useState(false);
 
@@ -102,6 +104,7 @@ export default function App() {
         pendingCount={isAdmin ? pendingCountForAdmin : pendingCountForStudent}
         unreadMessagesCount={unreadMessagesCount}
         onOpenAuth={() => setAuthModalOpen(true)}
+        onOpenAdminLogin={() => setAdminLoginModalOpen(true)}
         onOpenSupabase={() => setSupabaseModalOpen(true)}
         onOpenFeedback={() => setFeedbackModalOpen(true)}
       />
@@ -184,8 +187,8 @@ export default function App() {
             />
           )}
 
-          {/* TABS: ADMIN DASHBOARD */}
-          {(activeTab.startsWith('admin-')) && (
+          {/* TABS: ADMIN DASHBOARD (Protected by username & password) */}
+          {activeTab.startsWith('admin-') && isAdmin && (
             <AdminDashboard
               courses={courses}
               requests={requests}
@@ -196,6 +199,37 @@ export default function App() {
               activeSubTab={activeTab as 'admin-courses' | 'admin-pending' | 'admin-students' | 'admin-teachers' | 'admin-exams' | 'admin-settings'}
               setActiveSubTab={(sub) => setActiveTab(sub)}
             />
+          )}
+
+          {/* Gated Access for Admin Dashboard when not logged in as Admin */}
+          {activeTab.startsWith('admin-') && !isAdmin && (
+            <div className="max-w-md mx-auto my-12 bg-white rounded-2xl border border-stone-200 shadow-xl overflow-hidden text-right animate-in fade-in zoom-in-95 duration-200">
+              <div className="bg-emerald-950 text-white p-6 text-center border-b border-emerald-900">
+                <div className="w-14 h-14 mx-auto rounded-2xl bg-amber-500 text-stone-950 flex items-center justify-center font-bold shadow-md mb-3">
+                  <ShieldCheck className="w-8 h-8" />
+                </div>
+                <h3 className="font-bold text-lg text-white">لوحة تحكم الإدارة محمية</h3>
+                <p className="text-xs text-amber-300 mt-1">أكاديمية أهل القرآن (إدارة أ/ سلوى بكر)</p>
+              </div>
+              <div className="p-6 space-y-4">
+                <p className="text-xs text-stone-600 leading-relaxed text-center">
+                  يتطلب الدخول إلى لوحة التحكم إدخال اسم المستخدم وكلمة المرور الخاصة بإدارة الأكاديمية لمنع الحسابات الوهمية والدخول غير المصرح به.
+                </p>
+                <button
+                  onClick={() => setAdminLoginModalOpen(true)}
+                  className="w-full py-3 bg-emerald-800 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                >
+                  <Lock className="w-4 h-4 text-amber-300" />
+                  <span>تسجيل الدخول باسم مستخدم وكلمة مرور</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab('courses')}
+                  className="w-full py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold text-xs rounded-xl transition-colors cursor-pointer text-center block"
+                >
+                  العودة لتصفح الدورات المتاحة
+                </button>
+              </div>
+            </div>
           )}
 
         </div>
@@ -229,6 +263,13 @@ export default function App() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         currentUser={currentUser}
+      />
+
+      {/* Dedicated Admin Login Modal (Username & Password) */}
+      <AdminLoginModal
+        isOpen={adminLoginModalOpen}
+        onClose={() => setAdminLoginModalOpen(false)}
+        onSuccess={() => setActiveTab('admin-courses')}
       />
 
       {/* Supabase Config & Schema Modal */}

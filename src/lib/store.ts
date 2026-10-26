@@ -36,7 +36,7 @@ const DEFAULT_ADMIN_CREDENTIALS = {
 
 const DEFAULT_USERS: User[] = [
   {
-    id: 'user-admin-1',
+    id: 'user-admin-salwa',
     name: 'أ/ سلوى بكر (مدير الأكاديمية)',
     email: 'salwa.bakr@quran-academy.com',
     role: 'admin',
@@ -44,24 +44,6 @@ const DEFAULT_USERS: User[] = [
     avatar: BADGE_IMG,
     joinedAt: '2026-01-01',
     isCustomAdmin: true,
-  },
-  {
-    id: 'user-student-1',
-    name: 'عبد الله منصور الصالح',
-    email: 'abdullah@example.com',
-    role: 'student',
-    phone: '+201012345678',
-    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
-    joinedAt: '2026-02-10',
-  },
-  {
-    id: 'user-student-2',
-    name: 'سارة خالد العمري',
-    email: 'sara@example.com',
-    role: 'student',
-    phone: '+201098765432',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80',
-    joinedAt: '2026-02-14',
   }
 ];
 
@@ -111,7 +93,7 @@ const DEFAULT_COURSES: Course[] = [
     onlineLessonLink: 'https://meet.google.com/ahl-alquran-live',
     level: 'مبتدئ',
     image: HERO_IMG,
-    currentStudentsCount: 28,
+    currentStudentsCount: 0,
     maxStudents: 35,
     createdAt: '2026-10-15',
   },
@@ -132,7 +114,7 @@ const DEFAULT_COURSES: Course[] = [
     onlineLessonLink: 'https://us02web.zoom.us/j/89201928374?pwd=salwa',
     level: 'متوسط',
     image: STUDY_IMG,
-    currentStudentsCount: 19,
+    currentStudentsCount: 0,
     maxStudents: 25,
     createdAt: '2026-10-18',
   },
@@ -153,7 +135,7 @@ const DEFAULT_COURSES: Course[] = [
     onlineLessonLink: 'https://us02web.zoom.us/j/7729102938?pwd=sanad',
     level: 'إجازة وسند',
     image: BADGE_IMG,
-    currentStudentsCount: 9,
+    currentStudentsCount: 0,
     maxStudents: 10,
     createdAt: '2026-10-22',
   }
@@ -214,126 +196,23 @@ const DEFAULT_EXAMS: Exam[] = [
   }
 ];
 
-const DEFAULT_SUBMISSIONS: ExamSubmission[] = [
-  {
-    id: 'sub-1',
-    examId: 'exam-1',
-    examTitle: 'الاختبار الدوري الأول: أحكام النون الساكنة والتنوين',
-    courseId: 'c-1',
-    studentId: 'user-student-1',
-    studentName: 'عبد الله منصور الصالح',
-    whatsappNumber: '01012345678',
-    answers: { q1: 1, q2: 1, q3: 2, q4: 1 },
-    score: 20,
-    totalMarks: 20,
-    percentage: 100,
-    status: 'approved',
-    approvedAt: '2026-10-25 15:30',
-    submittedAt: '2026-10-25 14:15',
-    feedback: 'ممتاز ما شاء الله! إتقان تام لجميع أحكام النون الساكنة.',
-  },
-  {
-    id: 'sub-2',
-    examId: 'exam-1',
-    examTitle: 'الاختبار الدوري الأول: أحكام النون الساكنة والتنوين',
-    courseId: 'c-1',
-    studentId: 'user-student-2',
-    studentName: 'سارة خالد العمري',
-    whatsappNumber: '01098765432',
-    answers: { q1: 1, q2: 1, q3: 0, q4: 1 },
-    score: 15,
-    totalMarks: 20,
-    percentage: 75,
-    status: 'pending_approval',
-    submittedAt: '2026-10-26 11:20',
-  }
-];
+const DEFAULT_SUBMISSIONS: ExamSubmission[] = [];
 
-const DEFAULT_FEEDBACKS: StudentFeedback[] = [
-  {
-    id: 'fb-1',
-    studentId: 'user-student-1',
-    studentName: 'عبد الله منصور',
-    courseTitle: 'دورة إتقان التجويد وتصحيح التلاوة',
-    rating: 5,
-    comment: 'جزاكم الله خيراً يا أ/ سلوى بكر والشيخ الكريم على المتابعة الفردية والدقة في تصحيح التلاوة.',
-    createdAt: '2026-10-24',
-  },
-  {
-    id: 'fb-2',
-    studentId: 'user-student-2',
-    studentName: 'سارة خالد',
-    courseTitle: 'برنامج التحفيظ المكثف',
-    rating: 5,
-    comment: 'أكاديمية رائعة ومنظمة جداً، ونظام الامتحانات الآلية والتنبيهات ساعدني كثيراً في الالتزام.',
-    createdAt: '2026-10-25',
-  }
-];
+const DEFAULT_FEEDBACKS: StudentFeedback[] = [];
 
-const DEFAULT_REQUESTS: EnrollmentRequest[] = [
-  {
-    id: 'req-1',
-    courseId: 'c-1',
-    courseTitle: 'دورة إتقان التجويد وتصحيح التلاوة (جزء عمّ)',
-    userId: 'user-student-1',
-    studentName: 'عبد الله منصور الصالح',
-    studentEmail: 'abdullah@example.com',
-    whatsappNumber: '01012345678',
-    status: 'accepted',
-    notes: 'أحفظ جزء عم وتبارك وأرغب في مراجعة التجويد مع أ/ سلوى بكر.',
-    requestedAt: '2026-10-23 10:15',
-    reviewedAt: '2026-10-23 14:00',
-  },
-  {
-    id: 'req-2',
-    courseId: 'c-2',
-    courseTitle: 'برنامج التحفيظ المكثف - سورة البقرة وآل عمران',
-    userId: 'user-student-1',
-    studentName: 'عبد الله منصور الصالح',
-    studentEmail: 'abdullah@example.com',
-    whatsappNumber: '01012345678',
-    status: 'pending',
-    notes: 'تم التواصل مع الأستاذة سلوى بكر وجاري الانضمام.',
-    requestedAt: '2026-10-25 18:30',
-  }
-];
+const DEFAULT_REQUESTS: EnrollmentRequest[] = [];
 
-const DEFAULT_STUDENTS: StudentRecord[] = [
-  {
-    id: 'stud-1',
-    enrollmentId: 'req-1',
-    userId: 'user-student-1',
-    studentName: 'عبد الله منصور الصالح',
-    studentEmail: 'abdullah@example.com',
-    whatsappNumber: '01012345678',
-    courseId: 'c-1',
-    courseTitle: 'دورة إتقان التجويد وتصحيح التلاوة (جزء عمّ)',
-    joinedDate: '2026-10-23',
-    attendanceRate: 100,
-    notes: 'طالب حريص ومتميز في مخارج الحروف',
-  }
-];
+const DEFAULT_STUDENTS: StudentRecord[] = [];
 
 const DEFAULT_MESSAGES: AcademyMessage[] = [
   {
-    id: 'msg-1',
+    id: 'msg-welcome-salwa',
     userId: 'all',
     title: 'أهلاً بكم في أكاديمية أهل القرآن (إدارة أ/ سلوى بكر)',
-    content: 'نسعد بانضمامكم لأكاديمية أهل القرآن. نسعى معكم لنيل الخيرية في تعلم القرآن الكريم وتعليمه عبر أحدث الوسائل التعليمية.',
+    content: 'نسعد بزيارتكم وانضمامكم لأكاديمية أهل القرآن. نسعى معكم لنيل الخيرية في تعلم القرآن الكريم وإتقان تجويده بأحدث الأنظمة الذكية.',
     type: 'announcement',
     read: false,
-    createdAt: '2026-10-20 10:00',
-  },
-  {
-    id: 'msg-2',
-    userId: 'user-student-1',
-    title: 'تم تفعيل امتحان التجويد الدوري الأول',
-    content: 'أعلنت إدارة الأكاديمية عن فتح الاختبار الدوري الأول لأحكام النون والتنوين لطلاب دورة جزء عم. يمكنك الدخول الآن عبر صفحة الامتحانات.',
-    type: 'exam_alert',
-    courseId: 'c-1',
-    courseTitle: 'دورة إتقان التجويد وتصحيح التلاوة (جزء عمّ)',
-    read: false,
-    createdAt: '2026-10-24 12:00',
+    createdAt: '2026-10-26 12:00',
   }
 ];
 
@@ -370,6 +249,12 @@ class AcademyStore {
       if (!localStorage.getItem('ahl_quran_settings')) safeSet('ahl_quran_settings', DEFAULT_SETTINGS);
       if (!localStorage.getItem('ahl_quran_admin_creds')) safeSet('ahl_quran_admin_creds', DEFAULT_ADMIN_CREDENTIALS);
       if (!localStorage.getItem('ahl_quran_users')) safeSet('ahl_quran_users', DEFAULT_USERS);
+
+      // Clean/purge all fake/mock accounts from localStorage automatically
+      if (!localStorage.getItem('ahl_quran_fake_purged_v5')) {
+        localStorage.setItem('ahl_quran_fake_purged_v5', 'true');
+        setTimeout(() => this.purgeFakeAccounts(), 10);
+      }
 
       window.addEventListener('quran_store_updated', () => this.notify());
       window.addEventListener('storage', () => this.notify());
@@ -451,15 +336,86 @@ class AcademyStore {
     return safeGet<User[]>('ahl_quran_users', DEFAULT_USERS);
   }
 
-  public switchRole(role: UserRole): void {
-    const users = this.getAllUsers();
-    const target = users.find((u) => u.role === role) || DEFAULT_USERS[0];
-    this.setCurrentUser(target);
+  public purgeFakeAccounts(): { removedUsers: number; removedStudents: number; removedRequests: number; removedSubmissions: number } {
+    const fakeKeywords = ['abdullah@example.com', 'sara@example.com', 'user-student-1', 'user-student-2', 'عبد الله منصور', 'سارة خالد'];
+    
+    // Purge fake users, keeping real admin and real registered students
+    const allUsers = this.getAllUsers();
+    const cleanUsers = allUsers.filter(u => {
+      if (u.role === 'admin') return true;
+      const isFake = fakeKeywords.some(k => u.id.includes(k) || u.email.toLowerCase().includes(k) || u.name.includes(k));
+      return !isFake;
+    });
+    const removedUsers = allUsers.length - cleanUsers.length;
+    safeSet('ahl_quran_users', cleanUsers);
+
+    // Purge fake students
+    const allStudents = this.getStudents();
+    const cleanStudents = allStudents.filter(s => {
+      const isFake = fakeKeywords.some(k => s.userId.includes(k) || s.studentEmail.toLowerCase().includes(k) || s.studentName.includes(k));
+      return !isFake;
+    });
+    const removedStudents = allStudents.length - cleanStudents.length;
+    safeSet('ahl_quran_students', cleanStudents);
+
+    // Purge fake requests
+    const allRequests = this.getRequests();
+    const cleanRequests = allRequests.filter(r => {
+      const isFake = fakeKeywords.some(k => r.userId.includes(k) || r.studentEmail.toLowerCase().includes(k) || r.studentName.includes(k));
+      return !isFake;
+    });
+    const removedRequests = allRequests.length - cleanRequests.length;
+    safeSet('ahl_quran_requests', cleanRequests);
+
+    // Purge fake submissions
+    const allSubmissions = this.getSubmissions();
+    const cleanSubmissions = allSubmissions.filter(s => {
+      const isFake = fakeKeywords.some(k => s.studentId.includes(k) || s.studentName.includes(k));
+      return !isFake;
+    });
+    const removedSubmissions = allSubmissions.length - cleanSubmissions.length;
+    safeSet('ahl_quran_submissions', cleanSubmissions);
+
+    // Purge fake feedbacks
+    safeSet('ahl_quran_feedbacks', []);
+
+    // Recalculate real course students count
+    const courses = this.getCourses();
+    const updatedCourses = courses.map(c => ({
+      ...c,
+      currentStudentsCount: cleanStudents.filter(s => s.courseId === c.id).length
+    }));
+    safeSet('ahl_quran_courses', updatedCourses);
+
+    // If current logged-in session is a fake user, log out cleanly
+    const cur = this.getCurrentUser();
+    if (cur && fakeKeywords.some(k => cur.id.includes(k) || cur.email.toLowerCase().includes(k) || cur.name.includes(k))) {
+      this.logout();
+    } else {
+      this.notify();
+    }
+
+    return { removedUsers, removedStudents, removedRequests, removedSubmissions };
   }
 
-  public loginWithCredentials(userOrEmail: string, pass: string): { success: boolean; message: string; user?: User } {
-    // Check if it matches admin credentials
-    if (this.verifyAdminCredentials(userOrEmail, pass)) {
+  public switchRole(role: UserRole): boolean {
+    if (role === 'admin') {
+      // Admin dashboard requires username & password, cannot bypass
+      return false;
+    }
+    const users = this.getAllUsers();
+    const target = users.find((u) => u.role === 'student');
+    if (target) {
+      this.setCurrentUser(target);
+      return true;
+    } else {
+      this.logout();
+      return true;
+    }
+  }
+
+  public loginAdmin(username: string, pass: string): { success: boolean; message: string; user?: User } {
+    if (this.verifyAdminCredentials(username, pass)) {
       const adminUser: User = {
         id: 'user-admin-salwa',
         name: 'أ/ سلوى بكر (إدارة الأكاديمية)',
@@ -471,7 +427,19 @@ class AcademyStore {
         isCustomAdmin: true,
       };
       this.setCurrentUser(adminUser);
-      return { success: true, message: 'مرحباً أ/ سلوى بكر! تم تسجيل دخول الإدارة بنجاح.', user: adminUser };
+      return { 
+        success: true, 
+        message: 'مرحباً أ/ سلوى بكر! تم تسجيل الدخول إلى لوحة إدارة الأكاديمية بنجاح.', 
+        user: adminUser 
+      };
+    }
+    return { success: false, message: 'اسم المستخدم أو كلمة المرور غير صحيحة.' };
+  }
+
+  public loginWithCredentials(userOrEmail: string, pass: string): { success: boolean; message: string; user?: User } {
+    // Check if it matches admin credentials
+    if (this.verifyAdminCredentials(userOrEmail, pass)) {
+      return this.loginAdmin(userOrEmail, pass);
     }
 
     const users = this.getAllUsers();
